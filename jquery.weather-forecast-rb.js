@@ -9,14 +9,24 @@
         }, options);
 
 
+        function weatherData(json){
+            const city = json['city']['name'];
+            console.log(city);
+        }
 
-        function getWeatherInfo(city_name, mode) {
+
+        async function getWeatherInfo(city_name, mode) {
             const api_key = settings.openWeatherApiKey;
             const api_url = "https://api.openweathermap.org/data/2.5/" + mode + "?q=" + city_name + "&appid=" + api_key + "&units=metric";
             console.log(api_url);
+
+            // const response = await fetch(api_url);
+            // const weatherData = await response.json();
+            // console.log(weatherData);
+
             fetch(api_url)
                 .then(response => response.json())
-                .then( json => console.log(json) )
+                .then(json => weatherData(json))
                 .catch(e => console.log(e.message));
         }
 
@@ -26,7 +36,7 @@
             let $display, $icon;
             // setWeatherDisplayProperties();
             // setWeatherIconProperties();
-            getWeatherInfo("Halifax", "weather");
+            getWeatherInfo("Halifax", "forecast");
 
 
             $(this).find('a').on("click", function(event) {

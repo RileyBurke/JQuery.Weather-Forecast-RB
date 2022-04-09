@@ -8,6 +8,7 @@ class WeatherForecast{
         this.tempMin = json['list'][index]['main']['temp_min'];
         this.windSpeed = json['list'][index]['wind']['speed'];
         this.weatherDescription = json['list'][index]['weather'][0]['main'];
+        this.weatherCode = json['list'][index]['weather'][0]['icon'];
 
         if (typeof(json['list'][index]['rain']) !== 'undefined'){
             this.rain = json['list'][index]['rain']['3h'];
@@ -28,7 +29,10 @@ class WeatherForecast{
 
     get isSnowing(){
         return this.snow > 0;
+    }
 
+    get weatherIconUrl(){
+        return "https://openweathermap.org/img/wn/" + this.weatherCode + "@2x.png"
     }
 }
 
@@ -40,6 +44,7 @@ class CurrentWeather{
         this.tempMin = json['main']['temp_min'];
         this.windSpeed = json['wind']['speed'];
         this.weatherDescription = json['weather'][0]['main'];
+        this.weatherCode = json['weather'][0]['icon'];
 
         if (typeof(json['rain']) !== 'undefined'){
             this.rain = json['rain']['3h'];
@@ -60,6 +65,9 @@ class CurrentWeather{
 
     get isSnowing(){
         return this.snow > 0;
+    }
 
+    get weatherIconUrl(){
+        return "https://openweathermap.org/img/wn/" + this.weatherCode + "@2x.png"
     }
 }

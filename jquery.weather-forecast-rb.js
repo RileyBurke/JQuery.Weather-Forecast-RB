@@ -3,7 +3,7 @@
 
         let settings = $.extend({
             openWeatherApiKey: null,
-            geoLocation: 0,
+            geoLocation: false,
             iconSet: 0,
             closeable: true,
             forecast: true,
@@ -31,10 +31,10 @@
         }
 
 
-        function getWeatherInfo(city_name) {
+        function getWeatherInfo(location) {
             const api_key = settings.openWeatherApiKey;
-            const api_url_current_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city_name + "&appid=" + api_key + "&units=" + settings.units;
-            const api_url_weather_forecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city_name + "&appid=" + api_key + "&units=" + settings.units;
+            const api_url_current_weather = "https://api.openweathermap.org/data/2.5/weather?" + location + "&appid=" + api_key + "&units=" + settings.units;
+            const api_url_weather_forecast = "https://api.openweathermap.org/data/2.5/forecast?" + location + "&appid=" + api_key + "&units=" + settings.units;
 
             if (settings.forecast === true){
                 console.log(api_url_weather_forecast);
@@ -61,6 +61,37 @@
             }
         }
 
+        function getLocation() {
+            if (navigator.geolocation) {
+                console.log("Locating...");
+                return new Promise((getPosition) => {
+                    navigator.geolocation.getCurrentPosition(getPosition)});
+            }else{
+                alert("Geolocation not supported by browser.");
+                return "00000000000";
+            }
+        }
+
+        // function getPosition(position){
+        //     let latitude = position.coords.latitude;
+        //     console.log(latitude);
+        //     let longitude = position.coords.longitude;
+        //     console.log(longitude);
+        //     console.log("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+        //     return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+        // }
+
+
+        async function geoLocate(){
+            let position = await getLocation();
+            console.log(position);
+            let latitude = position.coords.latitude;
+                console.log(latitude);
+                let longitude = position.coords.longitude;
+                console.log(longitude);
+                console.log("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+                return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+        }
 
         return this.each( () => {
             this.css({
@@ -69,19 +100,30 @@
                 "height": "200px",
                 "text-align": "center"
                 });
-            console.log("hello");
+            console.log(settings.geoLocation);
+
+            let location;
+            if (settings.geoLocation === true){
+                console.log("Geolocation ON")
+                geoLocate().then(r => getWeatherInfo(r))
+                $("#get_city").hide();
+                $("#update_weather").click();
+            }
+
             let $display, $icons;
             // setWeatherDisplayProperties();
             // setWeatherIconProperties();
 
             $(this).find('#update_weather').on("click", function(event) {
                 event.preventDefault();
-                let city_name = $("#city").val();
-                console.log(city_name);
+                if (settings.geoLocation === false){
+                    location = "q=" + $("#city").val();
+                }
+                console.log(location);
                 console.log("test");
-                getWeatherInfo(city_name, "weather");
-
+                getWeatherInfo(location, "weather");
             });
+
             //
             // function setWeatherDisplayProperties() {
             //

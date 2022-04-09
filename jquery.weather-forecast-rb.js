@@ -46,12 +46,18 @@
                 fetch(api_url_current_weather)
                     .then(response => response.json())
                     .then(json => getWeatherData(json, "weather"))
-                    .catch(e => console.log(e.message));
+                    .catch( () => {
+                        $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                        $("#current_temperature").text("Invalid city");
+            });
             }else{
                 fetch(api_url_current_weather)
                     .then(response => response.json())
                     .then(json => getWeatherData(json, "weather"))
-                    .catch(e => console.log(e.message));
+                    .catch( () => {
+                        $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                        $("#current_temperature").text("Invalid city");
+                    });
             }
         }
 

@@ -9,6 +9,7 @@ class WeatherForecast{
         this.windSpeed = json['list'][index]['wind']['speed'];
         this.weatherDescription = json['list'][index]['weather'][0]['main'];
         this.weatherCode = json['list'][index]['weather'][0]['icon'];
+        this.time = new Date(json['list'][index]['dt_txt']);
 
         if (typeof(json['list'][index]['rain']) !== 'undefined'){
             this.rain = json['list'][index]['rain']['3h'];

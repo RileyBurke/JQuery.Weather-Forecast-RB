@@ -59,11 +59,18 @@
                     $("#current_temperature").text(currentWeather.currentTemp.toFixed(0) + "\xB0" + tempUnit);
                     $("#geolocation_city").text(currentWeather.city);
                 }else if(mode === "forecast") {
+                    let html = "";
                     for(let i = 4; i < 40; i += 4){
                         const weatherForecast = new WeatherForecast(json, i);
                         console.log(weatherForecast);
+                        html += `<span id="forecast${i}">
+                            <span id="date_time${i}">${weatherForecast.dateTimeString}</span>
+                            <img src="${weatherForecast.weatherIconUrl}" height="50px" width="50px">
+                            <span id="hi_temp${i}">${weatherForecast.tempMax}&#176;${tempUnit}</span>
+                            <span id="lo_temp${i}">${weatherForecast.tempMin}&#176;${tempUnit}</span>
+                            </span><br>`
                     }
-
+                    $forecastDisplay.html(html);
                 }
             }
 
@@ -150,9 +157,12 @@
                 $forecastDisplay.css({
                     "display": "none",
                     "text-align": "center",
-                    "position": "fixed",
-                    "left": "40%",
-                    "right": "40%"
+                    "position": "absolute",
+                    "width": "100%",
+                    "top": "0px",
+                    "left": "0px",
+                    "height": "100%",
+                    "img padding-top": "50%"
                 });
                 $("body").append($forecastDisplay);
             }

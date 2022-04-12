@@ -9,7 +9,7 @@
             iconSet: 0
         }, options);
 
-        return this.each( () => {
+        return this.find( () => {
             this.css({
                 "display": "block",
                 "width": "300px",
@@ -36,7 +36,7 @@
                 html += `<br><span id="current_temperature"></span>
                 <br><br>
                     <form id="get_city">
-                        <label htmlFor="city">City: </label>
+                        <label for="city">City: </label>
                         <input type="text" id="city" name="city">
                             <input type="button" id="update_weather" name="update_weather" value="Go">
                     </form>
@@ -44,13 +44,14 @@
                 this.html(html);
             }
 
-
             function getWeatherData(json, mode){
                 let tempUnit = "K";
+                let windUnit = "KM/H";
                 if (settings.units === "metric"){
                     tempUnit = "C";
                 }else if(settings.units === "imperial"){
                     tempUnit = "F";
+                    windUnit = "MPH";
                 }
                 if (mode === "weather"){
                     const currentWeather = new CurrentWeather(json);
@@ -59,21 +60,32 @@
                     $("#current_temperature").text(currentWeather.currentTemp.toFixed(0) + "\xB0" + tempUnit);
                     $("#geolocation_city").text(currentWeather.city);
                 }else if(mode === "forecast") {
-                    let html = "";
+                    let html = `<table id="forecast_table" style=><th>Time</th><th>Icon</th><th>Temp</th><th>Wind</th>`;
                     for(let i = 4; i < 40; i += 4){
                         const weatherForecast = new WeatherForecast(json, i);
+                        let windSpeed = weatherForecast.windSpeed;
+                        if (!(windUnit === "MPH")){
+                            windSpeed = (windSpeed * 3.6).toFixed(2); //Change M/S values to KM/H
+                        }
                         console.log(weatherForecast);
-                        html += `<span id="forecast${i}">
-                            <span id="date_time${i}">${weatherForecast.dateTimeString}</span>
-                            <img src="${weatherForecast.weatherIconUrl}" height="50px" width="50px">
-                            <span id="hi_temp${i}">${weatherForecast.tempMax}&#176;${tempUnit}</span>
-                            <span id="lo_temp${i}">${weatherForecast.tempMin}&#176;${tempUnit}</span>
-                            </span><br>`
+                        html += `<span id="forecast${i}"><tr>
+                            <td><span id="date_time${i}">${weatherForecast.dateTimeString}</span></td>
+                            <td><img id="icon${i}" src="${weatherForecast.weatherIconUrl}" height="50px" width="50px"></td>
+                            <td><span id="temp${i}">${weatherForecast.currentTemp}&#176;${tempUnit}</span></td>
+                            <td><span id="wind${i}">${windSpeed}${windUnit}</span></td>
+                            </tr></span><br>`
                     }
+                    html += `</table>`;
                     $forecastDisplay.html(html);
+                    $("#forecast_table").css({
+                        "margin-left": "auto",
+                        "margin-right": "auto"
+                    });
+                    $("td, th").css({
+                        "padding-right": "20px"
+                    });
                 }
             }
-
 
             function getWeatherInfo(location) {
                 const api_key = settings.openWeatherApiKey;
@@ -94,6 +106,10 @@
                             $("#current_icon").attr("src", "images/icons/weather_unknown.png");
                             $("#current_temperature").text("Invalid city");
                         });
+                }else if (location === "GEOLOCATION OFF"){
+                    alert("Geolocation is currently turned off. Cannot retrieve weather.")
+                    $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                    $("#geolocation_city").text("Geolocation failed.");
                 }else{
                     fetch(api_url_current_weather)
                         .then(response => response.json())
@@ -105,7 +121,6 @@
                 }
             }
 
-
             function getLocation() {
                 if (navigator.geolocation) {
                     console.log("Locating...");
@@ -113,24 +128,26 @@
                         navigator.geolocation.getCurrentPosition(getPosition)});
                 }else{
                     alert("Geolocation not supported by browser.");
-                    return "00000000000";
+                    return null;
                 }
             }
 
-
             async function geoLocate(){
                 let position = await getLocation();
-                console.log(position);
-                let latitude = position.coords.latitude;
-                console.log(latitude);
-                let longitude = position.coords.longitude;
-                console.log(longitude);
-                console.log("lat=" + latitude.toString() + "&lon=" + longitude.toString());
-                return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+                if (!position.ok){
+                    console.log(position);
+                    let latitude = position.coords.latitude;
+                    console.log(latitude);
+                    let longitude = position.coords.longitude;
+                    console.log(longitude);
+                    console.log("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+                    return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
+                }else{
+                    return "GEOLOCATION OFF";
+                }
             }
 
-
-            let $forecastDisplay, $dailyForecast, $closeButton;
+            let $forecastDisplay, $closeButton;
             if (settings.forecast) {
                 setForecastDisplayProperties();
                 $(this).find('#get_forecast').on("click", function(event){
@@ -151,7 +168,6 @@
                 getWeatherInfo(location, "weather");
             });
 
-
             function setForecastDisplayProperties() {
                 $forecastDisplay = $('<div></div>');
                 $forecastDisplay.css({
@@ -162,12 +178,11 @@
                     "top": "0px",
                     "left": "0px",
                     "height": "100%",
-                    "img padding-top": "50%"
+                    "vertical-align": "middle"
                 });
                 $("body").append($forecastDisplay);
             }
         });
-
     }
 } (jQuery));
 

@@ -43,7 +43,7 @@ class WeatherForecast{
         if (hour === 0){   //If 12AM
             hour = 12;
         }else if (hour === 12){  //If 12PM
-            hour = "PM";
+            amPm = "PM";
         }else if (hour > 12){   //If 1PM through 11PM
             hour = hour - 12;
             amPm = "PM";

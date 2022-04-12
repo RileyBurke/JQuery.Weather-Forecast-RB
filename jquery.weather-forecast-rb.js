@@ -18,13 +18,30 @@
                 });
             console.log(settings.geoLocation);
 
-
             let location;
+            let html = `<div id="weather_display">
+                <img src="images/icons/weather_unknown.png" id="current_icon" alt="Current Weather" height="128px"
+                     width="128px">`;
+            if (settings.forecast === true){
+                html += `<span id="get_forecast"><a>+</a></span>`;
+            }
             if (settings.geoLocation === true){
                 console.log("Geolocation ON")
                 geoLocate().then(r => getWeatherInfo(r))
-                $("#get_city").hide();
                 $("#update_weather").click();
+
+                html += `<br><span id="current_temperature"></span><br><br><span id="geolocation_city"></span></div>`
+                this.html(html);
+            }else{
+                html += `<br><span id="current_temperature"></span>
+                <br><br>
+                    <form id="get_city">
+                        <label htmlFor="city">City: </label>
+                        <input type="text" id="city" name="city">
+                            <input type="button" id="update_weather" name="update_weather" value="Go">
+                    </form>
+                </div>`;
+                this.html(html);
             }
 
 
@@ -40,7 +57,8 @@
                     console.log(currentWeather);
                     $("#current_icon").attr("src", currentWeather.weatherIconUrl);
                     $("#current_temperature").text(currentWeather.currentTemp.toFixed(0) + "\xB0" + tempUnit);
-                }else if(mode === "forecast"){
+                    $("#geolocation_city").text(currentWeather.city);
+                }else if(mode === "forecast") {
                     for(let i = 4; i < 40; i += 4){
                         const weatherForecast = new WeatherForecast(json, i);
                         console.log(weatherForecast);
@@ -108,7 +126,6 @@
             let $forecastDisplay, $dailyForecast, $closeButton;
             if (settings.forecast) {
                 setForecastDisplayProperties();
-                $("#get_forecast").text("+");
                 $(this).find('#get_forecast').on("click", function(event){
                     $forecastDisplay.show();
                     console.log("Display forecast");

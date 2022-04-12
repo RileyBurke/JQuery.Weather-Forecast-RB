@@ -35,6 +35,22 @@ class WeatherForecast{
     get weatherIconUrl(){
         return "https://openweathermap.org/img/wn/" + this.weatherCode + "@2x.png"
     }
+
+    get dateTimeString(){
+        let hour = this.time.getHours();
+        let amPm = "AM";
+
+        if (hour === 0){   //If 12AM
+            hour = 12;
+        }else if (hour === 12){  //If 12PM
+            hour = "PM";
+        }else if (hour > 12){   //If 1PM through 11PM
+            hour = hour - 12;
+            amPm = "PM";
+        }
+
+        return this.time.toDateString() + " " + hour + amPm;
+    }
 }
 
 class CurrentWeather{

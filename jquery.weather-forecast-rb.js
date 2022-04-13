@@ -6,7 +6,7 @@
             geoLocation: false,
             forecast: true,
             units: "metric",
-            iconSet: 0
+            tableColor: "rgba(0, 0, 0, 0)"
         }, options);
 
         return this.find( () => {
@@ -33,7 +33,7 @@
                 html += `<br><span id="current_temperature"></span><br><br><span id="geolocation_city"></span></div>`
                 this.html(html);
             }else{
-                html += `<br><span id="current_temperature"></span>
+                 html+= `<br><span id="current_temperature"></span>
                 <br><br>
                     <form id="get_city">
                         <label for="city">City: </label>
@@ -82,7 +82,14 @@
                         "margin-right": "auto"
                     });
                     $("td, th").css({
-                        "padding-right": "20px"
+                        "padding-left": "10px",
+                        "padding-right": "10px"
+                    });
+                    $("tr, table").css({
+                        "border": "solid",
+                        "border-width": "1px",
+                        "border-collapse": "collapse",
+                        "background-color": settings.tableColor
                     });
                 }
             }

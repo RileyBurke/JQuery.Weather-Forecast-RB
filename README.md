@@ -10,11 +10,20 @@ To set up add an empty div with an id of open_weather to your html, along with t
 - jquery.weather-forecast-rb.js
 - Your own javascript files.
 
+```html
+<div id="open_weather"></div>
+<script src="jquery-3.6.0.js"></script>
+<script src="lib_weather.js"></script>
+<script src="jquery.weather-forecast-rb.js"></script>
+<script src="app.js"></script>
+```
+
+
 Once your html is set up you can call the plugin in your javascript file like so:
 ```javascript
 $("#open_weather").weatherForecast({
 
-(CUSTOM OPTIONS HERE)
+//CUSTOM OPTIONS HERE
  
 )};
 ```

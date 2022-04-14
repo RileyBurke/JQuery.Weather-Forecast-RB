@@ -45,15 +45,14 @@
                 html += `<span id="get_forecast"></span>`;
             }
             if (settings.geoLocation === true){
-                console.log("Geolocation ON")
-                geoLocate().then(r => getWeatherInfo(r))
+                console.log("Geolocation ON");
+                geoLocate().then(r => getWeatherInfo(r));
                 $("#update_weather").click();
 
-                html += `<br><span id="current_temperature"></span><br><br><span id="geolocation_city"></span></div>`
+                html += `<br><span id="current_temperature"></span><br><br><span id="geolocation_city"></span></div>`;
                 this.html(html);
             }else{
-                 html+= `<br><span id="current_temperature"></span>
-                <br><br>
+                html+= `<br><span id="current_temperature"></span><br><br>
                 <label for="city">City: </label>
                 <input type="text" id="city" name="city">
                 <input type="button" id="update_weather" name="update_weather" value="Go">
@@ -74,7 +73,7 @@
                 const api_url_current_weather = "https://api.openweathermap.org/data/2.5/weather?" + location + "&appid=" + api_key + "&units=" + settings.units;
                 const api_url_weather_forecast = "https://api.openweathermap.org/data/2.5/forecast?" + location + "&appid=" + api_key + "&units=" + settings.units;
                 if (location === "GEOLOCATION OFF"){
-                    alert("Geolocation is currently turned off. Cannot retrieve weather.")
+                    alert("Geolocation is currently turned off. Cannot retrieve weather.");
                     $("#current_icon").attr("src", "images/icons/weather_unknown.png");
                     $("#geolocation_city").text("Geolocation failed.");
                 }else if (settings.forecast === true){
@@ -116,54 +115,53 @@
                     $("#geolocation_city").text(currentWeather.city);
                 }else if(mode === "forecast") {
                     if (tableDisplayed) {
-                    let html = `<table id="forecast_table" style=><tr><th id="table_title" colspan="4"></th></tr><tr><th>Time</th><th></th><th>Temp</th><th>Wind</th></tr>`;
-                    for(let i = 4; i < 40; i += 4){
-                        const weatherForecast = new WeatherForecast(json, i);
-                        let windSpeed = weatherForecast.windSpeed;
-                        if (!(windUnit === "MPH")){
-                            windSpeed = (windSpeed * 3.6).toFixed(2); //Changes M/S values to KM/H
+                        let html = `<table id="forecast_table" style=><tr><th id="table_title" colspan="4"></th></tr><tr><th>Time</th><th></th><th>Temp</th><th>Wind</th></tr>`;
+                        for(let i = 4; i < 40; i += 4){
+                            const weatherForecast = new WeatherForecast(json, i);
+                            let windSpeed = weatherForecast.windSpeed;
+                            if (!(windUnit === "MPH")){
+                                windSpeed = (windSpeed * 3.6).toFixed(2); //Changes M/S values to KM/H
+                            }
+                            html += `<tr>
+                                <td><span id="date_time${i}">${weatherForecast.dateTimeString}</span></td>
+                                <td><img id="icon${i}" src="${weatherForecast.weatherIconUrl}" height="50px" width="50px" alt="Icon"></td>
+                                <td><span id="temp${i}">${weatherForecast.currentTemp}&#176;${tempUnit}</span></td>
+                                <td><span id="wind${i}">${windSpeed}${windUnit}</span></td>
+                                </tr>`;
                         }
-                        html += `<tr>
-                            <td><span id="date_time${i}">${weatherForecast.dateTimeString}</span></td>
-                            <td><img id="icon${i}" src="${weatherForecast.weatherIconUrl}" height="50px" width="50px"></td>
-                            <td><span id="temp${i}">${weatherForecast.currentTemp}&#176;${tempUnit}</span></td>
-                            <td><span id="wind${i}">${windSpeed}${windUnit}</span></td>
-                            </tr>`
-                    }
-                    html += `</table>`;
-                    $forecastDisplay.append(html);
+                        html += `</table>`;
+                        $forecastDisplay.append(html);
 
-                    $("#forecast_table").css({
-                        "margin-left": "auto",
-                        "margin-right": "auto",
-                        "display": "inline-block",
-                        "margin-top": "10px",
-                        "color": settings.tableTextColor,
-                        "font-family": settings.tableTextFont
-                    });
-                    $("td, th").css({
-                        "padding-left": "10px",
-                        "padding-right": "10px"
-                    });
-                    $("tr, table").css({
-                        "border": "solid",
-                        "border-width": "1px",
-                        "border-collapse": "collapse",
-                        "background-color": settings.tableColor
-                    });
-                    if (settings.geoLocation){
-                        $("#table_title").text($("#geolocation_city").text());
+                        $("#forecast_table").css({
+                            "margin-left": "auto",
+                            "margin-right": "auto",
+                            "display": "inline-block",
+                            "margin-top": "10px",
+                            "color": settings.tableTextColor,
+                            "font-family": settings.tableTextFont
+                        });
+                        $("td, th").css({
+                            "padding-left": "10px",
+                            "padding-right": "10px"
+                        });
+                        $("tr, table").css({
+                            "border": "solid",
+                            "border-width": "1px",
+                            "border-collapse": "collapse",
+                            "background-color": settings.tableColor
+                        });
+                        if (settings.geoLocation){
+                            $("#table_title").text($("#geolocation_city").text());
+                        }else{
+                            $("#table_title").text($("#city").val());
+                        }
+                        $("#table_title").css({
+                            "font-size": "25px",
+                            "padding-top": "5px",
+                            "padding-bottom": "5px"
+                        });
+                        tableDisplayed = false;
                     }else{
-                        $("#table_title").text($("#city").val());
-                    }
-                    $("#table_title").css({
-                        "font-size": "25px",
-                        "padding-top": "5px",
-                        "padding-bottom": "5px"
-                    })
-                    tableDisplayed = false;
-
-                }else{
                         for(let i = 4; i < 40; i += 4){
                             const weatherForecast = new WeatherForecast(json, i);
                             let windSpeed = weatherForecast.windSpeed;
@@ -189,7 +187,7 @@
                     let longitude = position.coords.longitude;
                     return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
                 }else{
-                    console.log("Geolocation OFF.")
+                    console.log("Geolocation OFF.");
                     return "GEOLOCATION OFF";
                 }
             }
@@ -234,7 +232,6 @@
                         if($.isFunction(settings.openForecastDisplay)) {
                             settings.openForecastDisplay.call(this);
                         }
-
                         $forecastDisplay.show();
                     }
                 });
@@ -259,7 +256,7 @@
                     "text-align": "center",
                     "position": "absolute",
                     "width": "100%",
-                    "height": "100vh",
+                    "height": "100%",
                     "top": "0px",
                     "left": "0px",
                     "padding-top": "10%",
@@ -273,7 +270,7 @@
                     "color": settings.closeButtonColor,
                     "cursor": "pointer",
                     "font-size": "50px",
-                    "position": "fixed",
+                    "position": "absolute",
                     "top": "10px",
                     "right": "25px",
                     "border": settings.closeButtonBorder,
@@ -291,10 +288,8 @@
                 if($.isFunction(settings.closeForecastDisplay)) {
                     settings.closeForecastDisplay.call(this);
                 }
-
                 $forecastDisplay.hide();
             })
-
         });
     }
 } (jQuery));

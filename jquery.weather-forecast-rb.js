@@ -6,7 +6,12 @@
             geoLocation: false,
             forecast: true,
             units: "metric",
-            tableColor: "rgba(0, 0, 0, 0)"
+            tableColor: "rgba(255, 255, 255, .7)",
+            openForecastDisplay: "null",
+            closeForecastDisplay: "null",
+            borderStyle: "solid",
+            borderWidth: "0px",
+            borderColor: "black"
         }, options);
 
         return this.find( () => {
@@ -14,16 +19,20 @@
                 "display": "block",
                 "width": "300px",
                 "height": "200px",
-                "text-align": "center"
+                "text-align": "center",
+                "padding": "20px",
+                "border-style": settings.borderStyle,
+                "border-width": settings.borderWidth,
+                "border-color": settings.borderColor
                 });
-            console.log(settings.geoLocation);
 
             let location;
+            let tableDisplayed = true;
             let html = `<div id="weather_display">
                 <img src="images/icons/weather_unknown.png" id="current_icon" alt="Current Weather" height="128px"
                      width="128px">`;
             if (settings.forecast === true){
-                html += `<span id="get_forecast"><a>+</a></span>`;
+                html += `<span id="get_forecast"></span>`;
             }
             if (settings.geoLocation === true){
                 console.log("Geolocation ON")
@@ -35,13 +44,50 @@
             }else{
                  html+= `<br><span id="current_temperature"></span>
                 <br><br>
-                    <form id="get_city">
-                        <label for="city">City: </label>
-                        <input type="text" id="city" name="city">
-                            <input type="button" id="update_weather" name="update_weather" value="Go">
-                    </form>
+                <label for="city">City: </label>
+                <input type="text" id="city" name="city">
+                <input type="button" id="update_weather" name="update_weather" value="Go">
                 </div>`;
                 this.html(html);
+            }
+
+            $(this).find('#update_weather').on("click", function(event) {
+                event.preventDefault();
+                if (settings.geoLocation === false){
+                    location = "q=" + $("#city").val();
+                }
+                getWeatherInfo(location, "weather");
+            });
+
+            function getWeatherInfo(location) {
+                const api_key = settings.openWeatherApiKey;
+                const api_url_current_weather = "https://api.openweathermap.org/data/2.5/weather?" + location + "&appid=" + api_key + "&units=" + settings.units;
+                const api_url_weather_forecast = "https://api.openweathermap.org/data/2.5/forecast?" + location + "&appid=" + api_key + "&units=" + settings.units;
+                if (location === "GEOLOCATION OFF"){
+                    alert("Geolocation is currently turned off. Cannot retrieve weather.")
+                    $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                    $("#geolocation_city").text("Geolocation failed.");
+                }else if (settings.forecast === true){
+                    fetch(api_url_weather_forecast)
+                        .then(response => response.json())
+                        .then(json => getWeatherData(json, "forecast"))
+                        .catch(e => console.log(e.message));
+                    fetch(api_url_current_weather)
+                        .then(response => response.json())
+                        .then(json => getWeatherData(json, "weather"))
+                        .catch( () => {
+                            $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                            $("#current_temperature").text("Invalid city");
+                        });
+                }else{
+                    fetch(api_url_current_weather)
+                        .then(response => response.json())
+                        .then(json => getWeatherData(json, "weather"))
+                        .catch( () => {
+                            $("#current_icon").attr("src", "images/icons/weather_unknown.png");
+                            $("#current_temperature").text("Invalid city");
+                        });
+                }
             }
 
             function getWeatherData(json, mode){
@@ -55,31 +101,33 @@
                 }
                 if (mode === "weather"){
                     const currentWeather = new CurrentWeather(json);
-                    console.log(currentWeather);
                     $("#current_icon").attr("src", currentWeather.weatherIconUrl);
                     $("#current_temperature").text(currentWeather.currentTemp.toFixed(0) + "\xB0" + tempUnit);
                     $("#geolocation_city").text(currentWeather.city);
                 }else if(mode === "forecast") {
-                    let html = `<table id="forecast_table" style=><th>Time</th><th>Icon</th><th>Temp</th><th>Wind</th>`;
+                    if (tableDisplayed) {
+                    let html = `<table id="forecast_table" style=><tr><th id="table_title" colspan="4"></th></tr><tr><th>Time</th><th>Icon</th><th>Temp</th><th>Wind</th></tr>`;
                     for(let i = 4; i < 40; i += 4){
                         const weatherForecast = new WeatherForecast(json, i);
                         let windSpeed = weatherForecast.windSpeed;
                         if (!(windUnit === "MPH")){
-                            windSpeed = (windSpeed * 3.6).toFixed(2); //Change M/S values to KM/H
+                            windSpeed = (windSpeed * 3.6).toFixed(2); //Changes M/S values to KM/H
                         }
-                        console.log(weatherForecast);
-                        html += `<span id="forecast${i}"><tr>
+                        html += `<tr>
                             <td><span id="date_time${i}">${weatherForecast.dateTimeString}</span></td>
                             <td><img id="icon${i}" src="${weatherForecast.weatherIconUrl}" height="50px" width="50px"></td>
                             <td><span id="temp${i}">${weatherForecast.currentTemp}&#176;${tempUnit}</span></td>
                             <td><span id="wind${i}">${windSpeed}${windUnit}</span></td>
-                            </tr></span><br>`
+                            </tr>`
                     }
                     html += `</table>`;
-                    $forecastDisplay.html(html);
+                    $forecastDisplay.append(html);
+
                     $("#forecast_table").css({
                         "margin-left": "auto",
-                        "margin-right": "auto"
+                        "margin-right": "auto",
+                        "display": "inline-block",
+                        "margin-top": "10px"
                     });
                     $("td, th").css({
                         "padding-left": "10px",
@@ -91,40 +139,46 @@
                         "border-collapse": "collapse",
                         "background-color": settings.tableColor
                     });
+                    if (settings.geoLocation){
+                        $("#table_title").text($("#geolocation_city").text());
+                    }else{
+                        $("#table_title").text($("#city").val());
+                    }
+                    $("#table_title").css({
+                        "font-size": "25px",
+                        "padding-top": "5px",
+                        "padding-bottom": "5px"
+                    })
+                    tableDisplayed = false;
+
+                }else{
+                        for(let i = 4; i < 40; i += 4){
+                            const weatherForecast = new WeatherForecast(json, i);
+                            let windSpeed = weatherForecast.windSpeed;
+                            if (!(windUnit === "MPH")){
+                                windSpeed = (windSpeed * 3.6).toFixed(2); //Changes M/S values to KM/H
+                            }
+                            $("#table_title").text(weatherForecast.city);
+                            $(`#date_time${i}`).text(weatherForecast.dateTimeString);
+                            $(`#icon${i}`).attr("src", weatherForecast.weatherIconUrl);
+                            let tempDisplayed = weatherForecast.currentTemp + "\xB0" + tempUnit;
+                            $(`#temp${i}`).text(tempDisplayed);
+                            let windDisplayed = windSpeed + windUnit;
+                            $(`#wind${i}`).text(windDisplayed);
+                        }
+                    }
                 }
             }
 
-            function getWeatherInfo(location) {
-                const api_key = settings.openWeatherApiKey;
-                const api_url_current_weather = "https://api.openweathermap.org/data/2.5/weather?" + location + "&appid=" + api_key + "&units=" + settings.units;
-                const api_url_weather_forecast = "https://api.openweathermap.org/data/2.5/forecast?" + location + "&appid=" + api_key + "&units=" + settings.units;
-
-                if (settings.forecast === true){
-                    console.log(api_url_weather_forecast);
-                    console.log(api_url_current_weather);
-                    fetch(api_url_weather_forecast)
-                        .then(response => response.json())
-                        .then(json => getWeatherData(json, "forecast"))
-                        .catch(e => console.log(e.message));
-                    fetch(api_url_current_weather)
-                        .then(response => response.json())
-                        .then(json => getWeatherData(json, "weather"))
-                        .catch( () => {
-                            $("#current_icon").attr("src", "images/icons/weather_unknown.png");
-                            $("#current_temperature").text("Invalid city");
-                        });
-                }else if (location === "GEOLOCATION OFF"){
-                    alert("Geolocation is currently turned off. Cannot retrieve weather.")
-                    $("#current_icon").attr("src", "images/icons/weather_unknown.png");
-                    $("#geolocation_city").text("Geolocation failed.");
+            async function geoLocate(){
+                let position = await getLocation();
+                if (position !== null){
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
                 }else{
-                    fetch(api_url_current_weather)
-                        .then(response => response.json())
-                        .then(json => getWeatherData(json, "weather"))
-                        .catch( () => {
-                            $("#current_icon").attr("src", "images/icons/weather_unknown.png");
-                            $("#current_temperature").text("Invalid city");
-                        });
+                    console.log("Geolocation OFF.")
+                    return "GEOLOCATION OFF";
                 }
             }
 
@@ -132,63 +186,71 @@
                 if (navigator.geolocation) {
                     console.log("Locating...");
                     return new Promise((getPosition) => {
-                        navigator.geolocation.getCurrentPosition(getPosition)});
+                        navigator.geolocation.getCurrentPosition(getPosition, showError)});
                 }else{
                     alert("Geolocation not supported by browser.");
                     return null;
                 }
             }
 
-            async function geoLocate(){
-                let position = await getLocation();
-                if (!position.ok){
-                    console.log(position);
-                    let latitude = position.coords.latitude;
-                    console.log(latitude);
-                    let longitude = position.coords.longitude;
-                    console.log(longitude);
-                    console.log("lat=" + latitude.toString() + "&lon=" + longitude.toString());
-                    return ("lat=" + latitude.toString() + "&lon=" + longitude.toString());
-                }else{
-                    return "GEOLOCATION OFF";
+            function showError(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        $("#geolocation_city").text("Geolocation failed.");
+                        alert("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        $("#geolocation_city").text("Geolocation failed.");
+                        alert("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        $("#geolocation_city").text("Geolocation failed.");
+                        alert("The request to get user location timed out.");
+                        break;
                 }
             }
 
-            let $forecastDisplay, $closeButton;
+            let $forecastButton, $forecastDisplay, $closeButton;
             if (settings.forecast) {
+                setForecastButtonProperties();
                 setForecastDisplayProperties();
                 setCloseButtonProperties();
                 $(this).find('#get_forecast').on("click", function(event){
-                    console.log($("#current_temperature").text())
-                    if ((!($("#city").val() === "") && !settings.geoLocation) || (!($("#city_geolocation").val() === "") && settings.geoLocation)
-                    || ($("#current_temperature").text() !== "Invalid city")){
+                    if (((!($("#city").val() === "") && !settings.geoLocation) || (!($("#city_geolocation").val() === "") && settings.geoLocation))
+                        && (!($("#current_icon").attr("src") === "images/icons/weather_unknown.png")) && (($("#current_temperature").text() !== ""))){
+
+                        if($.isFunction(settings.openForecastDisplay)) {
+                            settings.openForecastDisplay.call(this);
+                        }
+
                         $forecastDisplay.show();
-                        console.log("Display forecast");
                     }
                 });
             }
 
-            $(this).find('#update_weather').on("click", function(event) {
-                event.preventDefault();
-                if (settings.geoLocation === false){
-                    location = "q=" + $("#city").val();
-                }
-                console.log(location);
-                console.log("test");
-                getWeatherInfo(location, "weather");
-            });
+            function setForecastButtonProperties(){
+                $forecastButton = $('<a>+</a>');
+                $forecastButton.css({
+                    "font-size": "40px",
+                    "padding-left": "10px",
+                    "cursor": "pointer"
+                });
+                $("#get_forecast").append($forecastButton);
+
+            }
 
             function setForecastDisplayProperties() {
                 $forecastDisplay = $('<div></div>');
                 $forecastDisplay.css({
+                    "background": "rgba(0, 0, 0, 0.5)",
                     "display": "none",
                     "text-align": "center",
                     "position": "absolute",
                     "width": "100%",
+                    "height": "100%",
                     "top": "0px",
                     "left": "0px",
-                    "height": "100%",
-                    "vertical-align": "middle"
+                    "padding-top": "10%"
                 });
                 $("body").append($forecastDisplay);
             }
@@ -197,17 +259,29 @@
                 let properties = {
                     "color": "black",
                     "cursor": "pointer",
-                    "font-size": "20px",
-                    "position": "absolute",
-                    "top": "5px",
-                    "right": "5px",
-                    "border": "0px",
-                    "z-index": "1"
+                    "font-size": "50px",
+                    "position": "fixed",
+                    "top": "10px",
+                    "right": "25px",
+                    "border": "2px solid black",
+                    "padding-left": "4px",
+                    "padding-right": "4px",
+                    "z-index": "1",
+                    "background": settings.tableColor,
                 }
-                $closeButton = $('<span>X</span>');
+                $closeButton = $('<span id="close">X</span>');
                 $closeButton.css(properties);
                 $forecastDisplay.append($closeButton);
             }
+
+            $closeButton.click(function () {
+                if($.isFunction(settings.closeForecastDisplay)) {
+                    settings.closeForecastDisplay.call(this);
+                }
+
+                $forecastDisplay.hide();
+            })
+
         });
     }
 } (jQuery));

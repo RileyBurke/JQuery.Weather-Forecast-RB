@@ -12,7 +12,7 @@ If the forecast is enabled you can then press + to open a display of the weather
 
 ![image](https://user-images.githubusercontent.com/90390132/163444203-0ae334c9-aad3-41d0-b34c-154e456c2cf0.png)
 
-There is also an option to use geolocation instead. Is this is enabled and you allow the page to access your location the city and weather information will automatically populate.
+There is also an option to use geolocation instead. If this is enabled and you allow the page to access your location the city and weather information will automatically populate.
 
 ![image](https://user-images.githubusercontent.com/90390132/163447925-6a87da24-d52a-49f0-8254-5f98e3fde482.png)
 

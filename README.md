@@ -2,6 +2,8 @@
  
 Simple weather app using OpenWeatherMap API to get the weather and/or forecast for a given location.
 
+## Installation
+
 To set up add an empty div with an id of open_weather to your html, along with the script files in the following order:
 - The JQuery file.
 - lib_weather.js
@@ -16,6 +18,7 @@ $("#open_weather").weatherForecast({
 )};
 
 
+## Customization
 There are many options for customization listed below along with their default values and an explanation of each:
 openWeatherApiKey: null, - An API key from OpenWeatherMap required for the plugin to get the weather information.
 geoLocation: false, - If enabled derives a location and the weather from the users position data instead of entering a location manually.

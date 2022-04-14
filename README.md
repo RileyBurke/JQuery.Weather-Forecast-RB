@@ -49,7 +49,7 @@ For demonstration and testing purposes an api key will be provided in my demo ap
 
 
 ## Customization
-There are many options for customization listed below along with their default values and an explanation of each:
+There are many options for customization provided. Listed below is an explanation of each along with their default values:
 ```javascript
 openWeatherApiKey: null, //An API key from OpenWeatherMap required for the plugin to get the weather information.
 geoLocation: false, //If enabled derives a location and the weather from the users position data instead of entering a location manually.

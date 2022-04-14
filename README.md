@@ -4,7 +4,18 @@ Simple weather app using OpenWeatherMap API to get the weather and/or forecast f
 
 ![image](https://user-images.githubusercontent.com/90390132/163441233-b9d959ea-1dd5-44c5-a140-bb9885d02d6d.png)
 
+To get the current weather type in the name of a city and press go. The icon and weather will update.
+
+![image](https://user-images.githubusercontent.com/90390132/163444659-93cfdd82-b5ab-4a9c-a8cf-f67014043116.png)
+
+If the forecast is enabled you can then press + to open a display of the weather forecast for the next 5 days. You can close this by clicking the X button in the top right of the webpage. You can change cities and display forecast as many times as you would like.
+
 ![image](https://user-images.githubusercontent.com/90390132/163444203-0ae334c9-aad3-41d0-b34c-154e456c2cf0.png)
+
+There is also an option to use geolocation instead. Is this is enabled and you allow the page to access your location the city and weather information will automatically populate.
+
+![image](https://user-images.githubusercontent.com/90390132/163447925-6a87da24-d52a-49f0-8254-5f98e3fde482.png)
+
 
 
 ## Installation

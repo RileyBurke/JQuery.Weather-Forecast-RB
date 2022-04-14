@@ -157,13 +157,16 @@
             let $forecastDisplay, $closeButton;
             if (settings.forecast) {
                 setForecastDisplayProperties();
+                setCloseButtonProperties();
                 $(this).find('#get_forecast').on("click", function(event){
-                    $forecastDisplay.show();
-                    console.log("Display forecast");
+                    console.log($("#current_temperature").text())
+                    if ((!($("#city").val() === "") && !settings.geoLocation) || (!($("#city_geolocation").val() === "") && settings.geoLocation)
+                    || ($("#current_temperature").text() !== "Invalid city")){
+                        $forecastDisplay.show();
+                        console.log("Display forecast");
+                    }
                 });
             }
-
-            // setWeatherIconProperties();
 
             $(this).find('#update_weather').on("click", function(event) {
                 event.preventDefault();
@@ -188,6 +191,22 @@
                     "vertical-align": "middle"
                 });
                 $("body").append($forecastDisplay);
+            }
+
+            function setCloseButtonProperties() {
+                let properties = {
+                    "color": "black",
+                    "cursor": "pointer",
+                    "font-size": "20px",
+                    "position": "absolute",
+                    "top": "5px",
+                    "right": "5px",
+                    "border": "0px",
+                    "z-index": "1"
+                }
+                $closeButton = $('<span>X</span>');
+                $closeButton.css(properties);
+                $forecastDisplay.append($closeButton);
             }
         });
     }

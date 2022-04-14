@@ -35,7 +35,7 @@ To set up the plugin simply add an empty div with an id of open_weather to your 
 ```
 
 
-Once your html is set up you can call the plugin in your javascript file like so:
+Once your html is set up you can call the plugin in your JavaScript files like so:
 ```javascript
 $("#open_weather").weatherForecast({
 

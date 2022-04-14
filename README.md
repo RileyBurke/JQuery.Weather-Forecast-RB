@@ -2,6 +2,11 @@
  
 Simple weather app using OpenWeatherMap API to get the weather and/or forecast for a given location.
 
+![image](https://user-images.githubusercontent.com/90390132/163441233-b9d959ea-1dd5-44c5-a140-bb9885d02d6d.png)
+
+![image](https://user-images.githubusercontent.com/90390132/163441427-68ef0eb3-f77d-43dc-95ea-e9da88100296.png)
+
+
 ## Installation
 
 To set up add an empty div with an id of open_weather to your html, along with the script files in the following order:
@@ -27,6 +32,10 @@ $("#open_weather").weatherForecast({
  
 )};
 ```
+
+In order to use this plugin you will need to make an account and acquire an API key from OpenWeatherMap: https://openweathermap.org/
+For demonstration and testing purposes an api key will be provided in my demo app.js files settings. By running the demo html file index.html with this you can test the customization options and functionality of the plugin.
+
 
 ## Customization
 There are many options for customization listed below along with their default values and an explanation of each:

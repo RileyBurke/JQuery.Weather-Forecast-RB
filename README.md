@@ -4,11 +4,11 @@ Simple weather app using OpenWeatherMap API to get the weather and/or forecast f
 
 ![image](https://user-images.githubusercontent.com/90390132/163441233-b9d959ea-1dd5-44c5-a140-bb9885d02d6d.png)
 
-To get the current weather type in the name of a city and press go. The icon and weather will update.
+To get the current weather type in the name of a city and press the go button. The icon and weather will then update.
 
 ![image](https://user-images.githubusercontent.com/90390132/163444659-93cfdd82-b5ab-4a9c-a8cf-f67014043116.png)
 
-If the forecast is enabled you can then press + to open a display of the weather forecast for the next 5 days. You can close this by clicking the X button in the top right of the webpage. You can change cities and display forecast as many times as you would like.
+If the forecast option is enabled you can then press + to open a display of the weather forecast for the next 5 days. You can close this display by clicking the X button in the top right of the webpage. You can change cities and display forecasts as many times as you would like.
 
 ![image](https://user-images.githubusercontent.com/90390132/163444203-0ae334c9-aad3-41d0-b34c-154e456c2cf0.png)
 
@@ -20,7 +20,7 @@ There is also an option to use geolocation instead. If this is enabled and you a
 
 ## Installation
 
-To set up the plugin simply add an empty div with an id of open_weather to your html, along with the JavaScript/jQuery files in the following order:
+To set up the plugin simply add an empty div element with an id of open_weather to the body of your HTML file, along with the JavaScript/jQuery files in the following order:
 - The jQuery file.
 - lib_weather.js
 - jquery.weather-forecast-rb.js
@@ -35,7 +35,7 @@ To set up the plugin simply add an empty div with an id of open_weather to your 
 ```
 
 
-Once your html is set up you can call the plugin in your JavaScript files like so:
+Once your HTML is set up correctly you can call the plugin in your JavaScript files like so:
 ```javascript
 $("#open_weather").weatherForecast({
 
@@ -45,7 +45,7 @@ $("#open_weather").weatherForecast({
 ```
 
 In order to use this plugin you will need to make an account and acquire an API key from OpenWeatherMap: https://openweathermap.org/
-For demonstration and testing purposes an api key will be provided in my demo app.js files settings. By running the demo html file index.html with this you can test the customization options and functionality of the plugin.
+For demonstration and testing purposes an API key will be provided in my demo app.js files settings. By running the demo HTML file index.html with this you can test the customization options and functionality of the plugin.
 
 
 ## Customization

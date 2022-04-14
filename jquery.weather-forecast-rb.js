@@ -13,7 +13,12 @@
             borderWidth: "0px",
             borderColor: "black",
             pluginColor: "rgba(255, 255, 255, .0)",
-            tableTextColor: "navy"
+            tableTextColor: "black",
+            closeButtonColor: "black",
+            closeButtonBorder: "2px solid black",
+            pluginTextColor: "black",
+            pluginTextFont: "times new roman",
+            tableTextFont: "times new roman"
         }, options);
 
         return this.find( () => {
@@ -26,7 +31,9 @@
                 "border-style": settings.borderStyle,
                 "border-width": settings.borderWidth,
                 "border-color": settings.borderColor,
-                "background-color": settings.pluginColor
+                "background-color": settings.pluginColor,
+                "color": settings.pluginTextColor,
+                "font-family": settings.pluginTextFont
                 });
 
             let location;
@@ -109,7 +116,7 @@
                     $("#geolocation_city").text(currentWeather.city);
                 }else if(mode === "forecast") {
                     if (tableDisplayed) {
-                    let html = `<table id="forecast_table" style=><tr><th id="table_title" colspan="4"></th></tr><tr><th>Time</th><th>Icon</th><th>Temp</th><th>Wind</th></tr>`;
+                    let html = `<table id="forecast_table" style=><tr><th id="table_title" colspan="4"></th></tr><tr><th>Time</th><th></th><th>Temp</th><th>Wind</th></tr>`;
                     for(let i = 4; i < 40; i += 4){
                         const weatherForecast = new WeatherForecast(json, i);
                         let windSpeed = weatherForecast.windSpeed;
@@ -131,7 +138,8 @@
                         "margin-right": "auto",
                         "display": "inline-block",
                         "margin-top": "10px",
-                        "color": settings.tableTextColor
+                        "color": settings.tableTextColor,
+                        "font-family": settings.tableTextFont
                     });
                     $("td, th").css({
                         "padding-left": "10px",
@@ -262,13 +270,13 @@
 
             function setCloseButtonProperties() {
                 let properties = {
-                    "color": "black",
+                    "color": settings.closeButtonColor,
                     "cursor": "pointer",
                     "font-size": "50px",
                     "position": "fixed",
                     "top": "10px",
                     "right": "25px",
-                    "border": "2px solid black",
+                    "border": settings.closeButtonBorder,
                     "padding-left": "4px",
                     "padding-right": "4px",
                     "z-index": "2",

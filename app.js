@@ -17,5 +17,10 @@ $("#open_weather").weatherForecast({
     borderStyle: "dashed",
     borderWidth: "1px",
     borderColor: "red",
-    pluginColor: "rgba(216, 191, 216, .5)"
+    pluginColor: "rgba(216, 191, 216, .5)",
+    tableTextColor: "navy",
+    closeButtonColor: "red",
+    closeButtonBorder: "2px solid green",
+    pluginTextFont: "arial",
+    tableTextFont: "arial"
 });

@@ -4,7 +4,7 @@ Simple weather app using OpenWeatherMap API to get the weather and/or forecast f
 
 ![image](https://user-images.githubusercontent.com/90390132/163441233-b9d959ea-1dd5-44c5-a140-bb9885d02d6d.png)
 
-![image](https://user-images.githubusercontent.com/90390132/163441427-68ef0eb3-f77d-43dc-95ea-e9da88100296.png)
+![image](https://user-images.githubusercontent.com/90390132/163444203-0ae334c9-aad3-41d0-b34c-154e456c2cf0.png)
 
 
 ## Installation
@@ -44,7 +44,7 @@ openWeatherApiKey: null, //An API key from OpenWeatherMap required for the plugi
 geoLocation: false, //If enabled derives a location and the weather from the users position data instead of entering a location manually.
 forecast: true, //If enabled a clickable + symbol can be used to pop open a table containing forecast information.
 units: "metric", //Metric or imperial units.
-tableColor: "rgba(255, 255, 255, .6)", //The color of the forecast table.
+tableColor: "rgba(255, 255, 255, .6)", //The background color of the forecast table and close button.
 openForecastDisplay: "null", //Your own function to be called upon opening the forecast table.
 closeForecastDisplay: "null", //Your own function to be called upon closing the forecast table.
 borderStyle: "solid", //The style of the border around the plugin div should you choose to use one.
@@ -52,4 +52,6 @@ borderWidth: "0px", //The width of the border around the plugin div should you c
 borderColor: "black", //The color of the border around the plugin div should you choose to use one.
 pluginColor: "rgba(255, 255, 255, .0)", //The color of the background of the plugin div element.
 tableTextColor: "navy" //The color of the text within the forecast table. 
+closeButtonColor: "black", //The color of the closeButton text.
+closeButtonBorder: "2px solid black" //The settings for the border of the close button.
 ```

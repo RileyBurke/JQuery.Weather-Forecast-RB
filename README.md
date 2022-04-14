@@ -9,8 +9,8 @@ Simple weather app using OpenWeatherMap API to get the weather and/or forecast f
 
 ## Installation
 
-To set up add an empty div with an id of open_weather to your html, along with the script files in the following order:
-- The JQuery file.
+To set up the plugin simply add an empty div with an id of open_weather to your html, along with the JavaScript/jQuery files in the following order:
+- The jQuery file.
 - lib_weather.js
 - jquery.weather-forecast-rb.js
 - Your own javascript files.

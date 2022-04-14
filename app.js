@@ -1,5 +1,9 @@
 "use strict"
 
+$("body").css({
+    "background-color": "cyan"
+});
+
 $("#open_weather").weatherForecast({
     openWeatherApiKey: "adcf237fa5811f92e8a66288993e9335",
     geoLocation: false,
@@ -12,5 +16,6 @@ $("#open_weather").weatherForecast({
     },
     borderStyle: "dashed",
     borderWidth: "1px",
-    borderColor: "red"
+    borderColor: "red",
+    pluginColor: "rgba(216, 191, 216, .5)"
 });

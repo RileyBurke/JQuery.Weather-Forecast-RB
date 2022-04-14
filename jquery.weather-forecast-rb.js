@@ -6,12 +6,14 @@
             geoLocation: false,
             forecast: true,
             units: "metric",
-            tableColor: "rgba(255, 255, 255, .7)",
+            tableColor: "rgba(255, 255, 255, .6)",
             openForecastDisplay: "null",
             closeForecastDisplay: "null",
             borderStyle: "solid",
             borderWidth: "0px",
-            borderColor: "black"
+            borderColor: "black",
+            pluginColor: "rgba(255, 255, 255, .0)",
+            tableTextColor: "navy"
         }, options);
 
         return this.find( () => {
@@ -23,7 +25,8 @@
                 "padding": "20px",
                 "border-style": settings.borderStyle,
                 "border-width": settings.borderWidth,
-                "border-color": settings.borderColor
+                "border-color": settings.borderColor,
+                "background-color": settings.pluginColor
                 });
 
             let location;
@@ -127,7 +130,8 @@
                         "margin-left": "auto",
                         "margin-right": "auto",
                         "display": "inline-block",
-                        "margin-top": "10px"
+                        "margin-top": "10px",
+                        "color": settings.tableTextColor
                     });
                     $("td, th").css({
                         "padding-left": "10px",
@@ -215,7 +219,7 @@
                 setForecastButtonProperties();
                 setForecastDisplayProperties();
                 setCloseButtonProperties();
-                $(this).find('#get_forecast').on("click", function(event){
+                $(this).find('#get_forecast').on("click", function(){
                     if (((!($("#city").val() === "") && !settings.geoLocation) || (!($("#city_geolocation").val() === "") && settings.geoLocation))
                         && (!($("#current_icon").attr("src") === "images/icons/weather_unknown.png")) && (($("#current_temperature").text() !== ""))){
 
@@ -247,10 +251,11 @@
                     "text-align": "center",
                     "position": "absolute",
                     "width": "100%",
-                    "height": "100%",
+                    "height": "100vh",
                     "top": "0px",
                     "left": "0px",
-                    "padding-top": "10%"
+                    "padding-top": "10%",
+                    "z-index": "1"
                 });
                 $("body").append($forecastDisplay);
             }
@@ -266,7 +271,7 @@
                     "border": "2px solid black",
                     "padding-left": "4px",
                     "padding-right": "4px",
-                    "z-index": "1",
+                    "z-index": "2",
                     "background": settings.tableColor,
                 }
                 $closeButton = $('<span id="close">X</span>');

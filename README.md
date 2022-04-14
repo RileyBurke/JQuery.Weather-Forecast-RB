@@ -45,7 +45,7 @@ $("#open_weather").weatherForecast({
 ```
 
 In order to use this plugin you will need to make an account and acquire an API key from OpenWeatherMap: https://openweathermap.org/
-For demonstration and testing purposes an API key will be provided in my demo app.js files settings. By running the demo HTML file index.html with this you can test the customization options and functionality of the plugin.
+For demonstration and testing purposes an API key will be provided in my demo app.js files settings. By running the demo HTML file index.html with this you can test the customization options and functionality of the plugin. The settings given in this file are only used for demonstration and are not necessarily the default values.
 
 
 ## Customization

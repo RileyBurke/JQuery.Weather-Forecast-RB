@@ -65,4 +65,7 @@ pluginColor: "rgba(255, 255, 255, .0)", //The color of the background of the plu
 tableTextColor: "navy" //The color of the text within the forecast table. 
 closeButtonColor: "black", //The color of the closeButton text.
 closeButtonBorder: "2px solid black" //The settings for the border of the close button.
+pluginTextColor: "black", //The color of the text in the plugin div.
+pluginTextFont: "times new roman", //The font used by the text in the plugin div.
+tableTextFont: "times new roman" //The font used by the text in the forecast table.
 ```
